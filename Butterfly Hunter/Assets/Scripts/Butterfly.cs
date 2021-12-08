@@ -28,11 +28,11 @@ public class Butterfly : MonoBehaviour
     void Update()
     {
         //Need Butterfly movement//
-        if (startPos > 0){
-            MoveLeft();
+        if (startPos < 0){
+            MoveRight();
         }
         else {
-            MoveRight();
+            MoveLeft();
         }
 
         // if (bndCheck != null && bndCheck.offLeft) {                    
@@ -42,15 +42,15 @@ public class Butterfly : MonoBehaviour
         //Note: Collision with butterfly is handled in player script//
     }
 
-    public virtual void MoveLeft() {                                             
+    public void MoveRight() {                                             
         Vector3 tempPos = pos;
-        tempPos.x -= speed * Time.deltaTime;
+        tempPos.x += speed * Time.deltaTime;
         pos = tempPos;
     }
 
-    public virtual void MoveRight() {                                             
+    public void MoveLeft() {                                             
         Vector3 tempPos = pos;
-        tempPos.x += speed * Time.deltaTime;
+        tempPos.x -= speed * Time.deltaTime;
         pos = tempPos;
     }
 }
