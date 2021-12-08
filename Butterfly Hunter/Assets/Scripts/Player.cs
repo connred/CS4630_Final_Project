@@ -36,12 +36,21 @@ public class Player : MonoBehaviour
         if (collideWith.tag == "Butterfly"){
             Destroy(collideWith);
             print("Got butterfly");
+            //----Add scoring system----//
         }
 
         //Colliding with birds
         if (collideWith.tag == "Bird"){
             Destroy(collideWith);
             print("Got bird");
+            //----Add scoring system----//
+        }
+
+        //Colliding with drone
+        if (collideWith.tag == "Drone"){
+            Destroy(collideWith);
+            print("Got drone");
+            //----Add scoring system----//
         }
     }
 }

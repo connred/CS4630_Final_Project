@@ -11,6 +11,8 @@ public class Main : MonoBehaviour
 
     private BoundsCheck      bndCheck;
 
+    public Vector3 pos;
+
     void Awake() {
         // Set bndCheck to reference the BoundsCheck component on this GameObject
         bndCheck = GetComponent<BoundsCheck>();
@@ -31,20 +33,32 @@ public class Main : MonoBehaviour
         }
 
         // Set the initial position for the go
-        Vector3 pos = Vector3.zero;              
-        float yMin = -bndCheck.camHeight + enemyPadding;
-        float yMax =  bndCheck.camHeight - enemyPadding;
-        pos.y = Random.Range( yMin, yMax );
-        //spawning on either side of screen
-        int rand = Random.Range(0,2);
-        if (rand == 0){
-            pos.x = bndCheck.camWidth + enemyPadding;
+        if (go.tag == "Butterfly" || go.tag == "Bird"){
+            pos = Vector3.zero;              
+            float yMin = -bndCheck.camHeight + enemyPadding;
+            float yMax =  bndCheck.camHeight - enemyPadding;
+            pos.y = Random.Range( yMin, yMax );
+            //spawning on either side of screen
+            int rand = Random.Range(0,2);
+            if (rand == 0){
+                pos.x = bndCheck.camWidth - enemyPadding;
+            }
+            else {
+                pos.x = -bndCheck.camWidth + enemyPadding;
+            }
+            
+            go.transform.position = pos;
         }
-        else {
-            pos.x = -bndCheck.camWidth - enemyPadding;
+
+        if (go.tag == "Drone"){
+            pos = Vector3.zero;              
+            float xMin = -bndCheck.camWidth + enemyPadding;
+            float xMax =  bndCheck.camWidth - enemyPadding;
+            pos.x = Random.Range( xMin, xMax );
+            pos.y = -bndCheck.camHeight - enemyPadding;
+            
+            go.transform.position = pos;
         }
-        
-        go.transform.position = pos;
 
         // Invoke SpawnGO() again
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );

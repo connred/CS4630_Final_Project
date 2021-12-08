@@ -7,12 +7,12 @@ public class Butterfly : MonoBehaviour
     [Header("Set in Inspector: Enemy")]
     float speed = 10f;
 
-    float startPos;
     private BoundsCheck bndCheck;
+    float startPos;
 
-    void Awake() {                                                           
+    void Start() {                                                           
         bndCheck = GetComponent<BoundsCheck>();
-        startPos = transform.position.x;
+        startPos = GameObject.Find("Main Camera").GetComponent<Main>().pos.x;
     }
 
     public Vector3 pos {                                                     
@@ -28,29 +28,29 @@ public class Butterfly : MonoBehaviour
     void Update()
     {
         //Need Butterfly movement//
-        if (startPos > 0){
-            MoveLeft();
-        }
-        else {
+        if (startPos < 0){
             MoveRight();
         }
+        else {
+            MoveLeft();
+        }
 
-        // if (bndCheck != null && bndCheck.offLeft) {                    
-        //     Destroy( gameObject );
-        // }
+        if (bndCheck != null && (bndCheck.offLeft || bndCheck.offRight)) {                    
+            Destroy( gameObject );
+        }
 
         //Note: Collision with butterfly is handled in player script//
     }
 
-    public virtual void MoveLeft() {                                             
+    public void MoveRight() {                                             
         Vector3 tempPos = pos;
-        tempPos.x -= speed * Time.deltaTime;
+        tempPos.x += speed * Time.deltaTime;
         pos = tempPos;
     }
 
-    public virtual void MoveRight() {                                             
+    public void MoveLeft() {                                             
         Vector3 tempPos = pos;
-        tempPos.x += speed * Time.deltaTime;
+        tempPos.x -= speed * Time.deltaTime;
         pos = tempPos;
     }
 }
