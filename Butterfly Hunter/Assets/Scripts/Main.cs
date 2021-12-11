@@ -10,15 +10,33 @@ public class Main : MonoBehaviour
     public float             enemyDefaultPadding = 1.5f; // Padding for position
 
     private BoundsCheck      bndCheck;
+    public GameObject whirlwind;
+    public Player player;
 
     public Vector3 pos;
 
-    void Awake() {
+    //int numButterflies = 0;
+
+    void Start() {
         // Set bndCheck to reference the BoundsCheck component on this GameObject
         bndCheck = GetComponent<BoundsCheck>();
+        player = GameObject.Find("Player").GetComponent<Player>();
 
         // Invoke SpawnGO() once (in 2 seconds, based on default values)
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );
+
+        SpawnWhirlwind();
+    }
+
+    void Update()
+    {
+        //count between 0-3
+        // numButterflies = player.count % 4;
+        // print(numButterflies);
+        // if (numButterflies == Random.Range(1,4)){
+        //     SpawnWhirlwind();
+        //     numButterflies = 0;
+        // }
     }
 
     public void SpawnGO() {
@@ -62,5 +80,22 @@ public class Main : MonoBehaviour
 
         // Invoke SpawnGO() again
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );
+    }
+
+    public void SpawnWhirlwind()
+    {
+        GameObject go = Instantiate<GameObject>(whirlwind);
+        Vector3 whirlwindPos = Vector3.zero;
+        float yMin = -bndCheck.camHeight;
+        float yMax =  bndCheck.camHeight;
+        float xMin = -bndCheck.camWidth;
+        float xMax =  bndCheck.camWidth;
+        whirlwindPos.y = Random.Range( yMin, yMax );
+        whirlwindPos.x = Random.Range(xMin, xMax);
+        whirlwindPos.z = -1f;
+
+        go.transform.position = whirlwindPos;
+
+        //Invoke("SpawnWhirlwind", 5f);
     }
 }
