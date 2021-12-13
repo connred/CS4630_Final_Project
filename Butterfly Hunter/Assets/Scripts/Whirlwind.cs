@@ -45,7 +45,7 @@ public class Whirlwind : MonoBehaviour
             }
 
             // This is the standard linear interpolation function
-            p01 = (1 - u) * p0 + u * p1;
+            p01 = (1 - u) * p0 + u * new Vector3(p0.x, p0.y, 4f);
 
             player.transform.position = p01;
             print(p01);

@@ -36,9 +36,12 @@ public class Main : MonoBehaviour
     public Player player;
 
     public Vector3 pos;
+    public bool spawned = false;
 
     public float time = 0;
-    //int numButterflies = 0;
+    int numButterflies = 0;
+    public float        timeStart;
+    public float        timeDuration = 10f;
 
     void addPlayer(int score, int playerNum, string feedback)
     {
@@ -75,7 +78,6 @@ public class Main : MonoBehaviour
         }
         // Invoke SpawnGO() once (in 2 seconds, based on default values)
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );
-        SpawnWhirlwind();
     }
 
     void Update()
@@ -122,12 +124,20 @@ public class Main : MonoBehaviour
             
         }
         //count between 0-3
-        // numButterflies = player.count % 4;
-        // print(numButterflies);
-        // if (numButterflies == Random.Range(1,4)){
-        //     SpawnWhirlwind();
-        //     numButterflies = 0;
-        // }
+        numButterflies = player.count % 4;
+        if (numButterflies == Random.Range(1,5) && !spawned){
+            SpawnWhirlwind();
+            spawned = true;
+            timeStart = Time.time;
+        }
+        if (spawned){
+            float u = (Time.time-timeStart)/timeDuration;
+            if (u >= 0.01f) {
+                u = 0.01f;
+                spawned = false;
+                Destroy(GameObject.Find("Whirlwind(Clone)"));
+            }
+        }
     }
 
     public void SpawnGO() {
@@ -183,7 +193,7 @@ public class Main : MonoBehaviour
         float xMax =  bndCheck.camWidth;
         whirlwindPos.y = Random.Range( yMin, yMax );
         whirlwindPos.x = Random.Range(xMin, xMax);
-        whirlwindPos.z = -1f;
+        //whirlwindPos.z = 1f;
 
         go.transform.position = whirlwindPos;
 
