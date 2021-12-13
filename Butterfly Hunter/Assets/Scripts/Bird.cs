@@ -42,12 +42,14 @@ public class Bird : MonoBehaviour
     public void MoveRight() {                                             
         Vector3 tempPos = pos;
         tempPos.x += speed * Time.deltaTime;
+        tempPos.y = 0.05f * (tempPos.x * tempPos.x);
         pos = tempPos;
     }
 
     public void MoveLeft() {                                             
         Vector3 tempPos = pos;
         tempPos.x -= speed * Time.deltaTime;
+        tempPos.y = 0.05f * (tempPos.x * tempPos.x);
         pos = tempPos;
     }
 }

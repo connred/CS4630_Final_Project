@@ -5,7 +5,7 @@ using UnityEngine;
 public class Butterfly : MonoBehaviour
 {
     [Header("Set in Inspector: Enemy")]
-    float speed = 10f;
+    float speed = 5f;
 
     private BoundsCheck bndCheck;
     float startPos;
@@ -45,12 +45,14 @@ public class Butterfly : MonoBehaviour
     public void MoveRight() {                                             
         Vector3 tempPos = pos;
         tempPos.x += speed * Time.deltaTime;
+        tempPos.y = Mathf.Sin (Time.time * 3f) * 1f;
         pos = tempPos;
     }
 
     public void MoveLeft() {                                             
         Vector3 tempPos = pos;
         tempPos.x -= speed * Time.deltaTime;
+        tempPos.y = Mathf.Sin (Time.time * 3f) * 1f;
         pos = tempPos;
     }
 }
