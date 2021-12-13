@@ -15,6 +15,7 @@ class SaveData
     public int score;
     public string feedback;
     public DateTime lastPlayed;
+    public int level;
 }
 
 public class Main : MonoBehaviour
@@ -27,6 +28,7 @@ public class Main : MonoBehaviour
     public GameObject timeUI;
     public GameObject playerUI;
     public GameObject lvlHighschool;
+    public GameObject levelUI;
     public int playerID;
     public int level = 1;
     //public GameObject scoreUI;
@@ -65,6 +67,10 @@ public class Main : MonoBehaviour
         //text
     }
     void Start() {
+        timeUI = GameObject.Find("TimeUI");
+        playerUI = GameObject.Find("PlayerUI");
+        lvlHighschool = GameObject.Find("hsUI");
+        levelUI = GameObject.Find("LevelUI");
         // Set bndCheck to reference the BoundsCheck component on this GameObject
         bndCheck = GetComponent<BoundsCheck>();
         player = GameObject.Find("Player").GetComponent<Player>();
@@ -78,6 +84,7 @@ public class Main : MonoBehaviour
         }
         // Invoke SpawnGO() once (in 2 seconds, based on default values)
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );
+        levelUI.GetComponent<Text>().text = "Level: " + level;
     }
 
     void Update()
@@ -93,8 +100,8 @@ public class Main : MonoBehaviour
         if (player.score < 0)
         {
             string feedback = showFeedback();
-            addPlayer(player.score, playerID, feedback);
-            SaveGame(player.score, playerID, feedback);
+            addPlayer(0, playerID, feedback);
+            SaveGame(0, playerID, feedback);
             //end game scene load
             SceneManager.LoadScene("GameOver");
         }
@@ -103,15 +110,11 @@ public class Main : MonoBehaviour
             if (level == 1)
             {
                 string feedback = showFeedback();
-                addPlayer(player.score, playerID, feedback);
-                SaveGame(player.score, playerID, feedback);
                 SceneManager.LoadScene("Level2");
             }
             if (level == 2)
             {
                 string feedback = showFeedback();
-                addPlayer(player.score, playerID, feedback);
-                SaveGame(player.score, playerID, feedback);
                 SceneManager.LoadScene("Level3");
             }
             if (level == 3)
@@ -119,7 +122,7 @@ public class Main : MonoBehaviour
                 string feedback = showFeedback();
                 addPlayer(player.score, playerID, feedback);
                 SaveGame(player.score, playerID, feedback);
-                SceneManager.LoadScene("EndGame");
+                SceneManager.LoadScene("GameOver");
             }
             
         }
@@ -212,6 +215,7 @@ public class Main : MonoBehaviour
         data.score = score;
         data.feedback = feedback;
         data.lastPlayed = DateTime.Now;
+        data.level = level;
         bf.Serialize(file, data);
         file.Close();
         Debug.Log("Game data saved");
@@ -227,7 +231,7 @@ public class Main : MonoBehaviour
                        + "/Log.dat", FileMode.Open);
             SaveData data = (SaveData)bf.Deserialize(file);
             file.Close();
-            lvlHighschool.GetComponent<Text>().text = "Highscore: " + data.score;
+            lvlHighschool.GetComponent<Text>().text = "Previous Score: " + data.score;
             playerUI.GetComponent<Text>().text = "Player: " + (data.playerID);
             playerID = data.playerID;
             Debug.Log("Game data loaded!");
