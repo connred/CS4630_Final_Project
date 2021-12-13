@@ -128,15 +128,15 @@ public class Main : MonoBehaviour
         }
         //count between 0-3
         numButterflies = player.count % 4;
-        if (numButterflies == Random.Range(1,5) && !spawned){
+        if (numButterflies == Random.Range(1,4) && !spawned){
             SpawnWhirlwind();
             spawned = true;
             timeStart = Time.time;
         }
         if (spawned){
             float u = (Time.time-timeStart)/timeDuration;
-            if (u >= 0.01f) {
-                u = 0.01f;
+            if (u >= 0.5f) {
+                u = 0.5f;
                 spawned = false;
                 Destroy(GameObject.Find("Whirlwind(Clone)"));
             }
@@ -196,11 +196,8 @@ public class Main : MonoBehaviour
         float xMax =  bndCheck.camWidth;
         whirlwindPos.y = Random.Range( yMin, yMax );
         whirlwindPos.x = Random.Range(xMin, xMax);
-        //whirlwindPos.z = 1f;
 
         go.transform.position = whirlwindPos;
-
-        //Invoke("SpawnWhirlwind", 5f);
     }
     string showFeedback()
     {
