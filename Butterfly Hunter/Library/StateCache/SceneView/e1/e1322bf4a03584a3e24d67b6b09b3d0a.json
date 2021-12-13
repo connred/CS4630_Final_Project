@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"m_AlwaysRefresh":false,"showFog":true,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true,"showVisualEffectGraphs":true,"m_FxEnabled":true},"in2DMode":false,"pivot":{"x":434.7532958984375,"y":207.39553833007813,"z":-339.4222412109375},"rotation":{"x":0.07166805863380432,"y":-0.19882652163505555,"z":-0.01457514613866806,"w":-0.9773054718971252},"size":468.0697021484375,"orthographic":false}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"m_AlwaysRefresh":false,"showFog":true,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true,"showVisualEffectGraphs":true,"m_FxEnabled":true},"in2DMode":false,"pivot":{"x":0.0,"y":0.0,"z":8.0},"rotation":{"x":0.026695052161812784,"y":0.01229108963161707,"z":0.00033343976247124374,"w":-0.9995712637901306},"size":20.39242172241211,"orthographic":false}
+>>>>>>> sellinger
