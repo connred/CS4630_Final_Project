@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
     Vector3 pos;
     public int count;
     public bool checkToStart;
+    public int score;
+    public GameObject scoreUI;
 
     private BoundsCheck bndCheck;
 
@@ -27,6 +30,8 @@ public class Player : MonoBehaviour
         if (bndCheck != null && (bndCheck.offLeft || bndCheck.offRight || bndCheck.offDown || bndCheck.offUp)) {
             this.transform.position = pos;
         }
+        //--------UI Score Update-----//
+        scoreUI.GetComponent<Text>().text = "Score: " + score;
     }
 
     void Move()
@@ -51,6 +56,7 @@ public class Player : MonoBehaviour
             Destroy(collideWith);
             count++;
             print("Got butterfly");
+            score += 15;
             //----Add scoring system----//
         }
 
@@ -59,6 +65,7 @@ public class Player : MonoBehaviour
             Destroy(collideWith);
             print("Got bird");
             //----Add scoring system----//
+            score -= 10;
         }
 
         //Colliding with drone
@@ -66,6 +73,7 @@ public class Player : MonoBehaviour
             Destroy(collideWith);
             print("Got drone");
             //----Add scoring system----//
+            score -= 15;
         }
 
         if (collideWith.tag == "Whirlwind"){
