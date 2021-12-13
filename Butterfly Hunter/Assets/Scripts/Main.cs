@@ -1,6 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+using Random = UnityEngine.Random;
+
+[Serializable]
+class SaveData
+{
+    public int playerID;
+    public int score;
+    public string feedback;
+    public DateTime lastPlayed;
+}
 
 public class Main : MonoBehaviour
 {
@@ -8,6 +23,13 @@ public class Main : MonoBehaviour
     public GameObject[]      prefabEnemies;              // Array of Enemy prefabs
     public float             enemySpawnPerSecond = 0.5f; // # Enemies/second
     public float             enemyDefaultPadding = 1.5f; // Padding for position
+    public float winCondiiton = 150f;
+    public GameObject timeUI;
+    public GameObject playerUI;
+    public GameObject lvlHighschool;
+    public int playerID;
+    public int level = 1;
+    //public GameObject scoreUI;
 
     private BoundsCheck      bndCheck;
     public GameObject whirlwind;
@@ -15,21 +37,90 @@ public class Main : MonoBehaviour
 
     public Vector3 pos;
 
+    public float time = 0;
     //int numButterflies = 0;
 
+    void addPlayer(int score, int playerNum, string feedback)
+    {
+        //path
+        string path = Application.dataPath + "/Log.txt";
+
+        if (File.Exists(path))
+        {
+            File.WriteAllText(path, "Player Log \n\n");
+        }
+        //create
+
+        string content =
+            "Player ID: " + playerNum + "\n" +
+            "Score " + score + "\n" +
+            "Date Played: " + System.DateTime.Now + "\n" +
+            "Player Feedback: " + feedback + "\n\n";
+        File.AppendAllText(path, content);
+
+
+        //text
+    }
     void Start() {
         // Set bndCheck to reference the BoundsCheck component on this GameObject
         bndCheck = GetComponent<BoundsCheck>();
         player = GameObject.Find("Player").GetComponent<Player>();
+        
 
+        // Load player prefs and create player ID if not in prefs
+        LoadGame();
+        if (playerID <= 1000)
+        {
+            playerID = Random.Range(1000, 9999);
+        }
         // Invoke SpawnGO() once (in 2 seconds, based on default values)
         Invoke( "SpawnGO", 1f/enemySpawnPerSecond );
-
         SpawnWhirlwind();
     }
 
     void Update()
     {
+
+        //Time update
+        if ( player.score >= 0)
+        {
+            time += Time.deltaTime;
+            timeUI.GetComponent<Text>().text = "Time: " + time;
+        }
+          
+        if (player.score < 0)
+        {
+            string feedback = showFeedback();
+            addPlayer(player.score, playerID, feedback);
+            SaveGame(player.score, playerID, feedback);
+            //end game scene load
+            SceneManager.LoadScene("GameOver");
+        }
+        if (player.score >= winCondiiton)
+        {
+            if (level == 1)
+            {
+                string feedback = showFeedback();
+                addPlayer(player.score, playerID, feedback);
+                SaveGame(player.score, playerID, feedback);
+                SceneManager.LoadScene("Level2");
+            }
+            if (level == 2)
+            {
+                string feedback = showFeedback();
+                addPlayer(player.score, playerID, feedback);
+                SaveGame(player.score, playerID, feedback);
+                SceneManager.LoadScene("Level3");
+            }
+            if (level == 3)
+            {
+                string feedback = showFeedback();
+                addPlayer(player.score, playerID, feedback);
+                SaveGame(player.score, playerID, feedback);
+                SceneManager.LoadScene("EndGame");
+            }
+            
+        }
         //count between 0-3
         // numButterflies = player.count % 4;
         // print(numButterflies);
@@ -97,5 +188,41 @@ public class Main : MonoBehaviour
         go.transform.position = whirlwindPos;
 
         //Invoke("SpawnWhirlwind", 5f);
+    }
+    string showFeedback()
+    {
+        return null;
+    }
+    void SaveGame(int score, int playerNum, string feedback)
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(Application.persistentDataPath + "/Log.dat");
+        SaveData data = new SaveData();
+        data.playerID = playerNum;
+        data.score = score;
+        data.feedback = feedback;
+        data.lastPlayed = DateTime.Now;
+        bf.Serialize(file, data);
+        file.Close();
+        Debug.Log("Game data saved");
+    }
+    void LoadGame()
+    {
+        if (File.Exists(Application.persistentDataPath
+                       + "/Log.dat"))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file =
+                       File.Open(Application.persistentDataPath
+                       + "/Log.dat", FileMode.Open);
+            SaveData data = (SaveData)bf.Deserialize(file);
+            file.Close();
+            lvlHighschool.GetComponent<Text>().text = "Highscore: " + data.score;
+            playerUI.GetComponent<Text>().text = "Player: " + (data.playerID);
+            playerID = data.playerID;
+            Debug.Log("Game data loaded!");
+        }
+        else
+            Debug.LogError("There is no save data!");
     }
 }
